@@ -29,6 +29,7 @@ def run_qite(
     cumulative_t=True,
     b_thresh=1.0e-6,
     x_thresh=1.0e-10,
+    conv_thresh=1.0e-3,
     physical_r = False,
     folded_spectrum = False,
     BeH2_guess = False,
@@ -80,6 +81,7 @@ def run_qite(
                 cumulative_t=cumulative_t,
                 b_thresh=b_thresh, 
                 x_thresh=x_thresh,
+                conv_thresh=conv_thresh,
                 physical_r=physical_r,
                 folded_spectrum=folded_spectrum,
                 BeH2_guess=BeH2_guess,
@@ -96,36 +98,40 @@ def run_qite(
                 cis_target_root=cis_target_root)
 
         if(use_exact_evolution):
-            with open(f'{output_path}qite_beta_{beta}_db_{db}_EXACT_EVOLUTION_summary.dat', 'r') as file:
-                for _ in range(2):
-                    next(file)
+            path = f'{output_path}qite_beta_{beta}_db_{db}_EXACT_EVOLUTION_summary.dat'
+            # with open(f'{output_path}qite_beta_{beta}_db_{db}_EXACT_EVOLUTION_summary.dat', 'r') as file:
+            #     for _ in range(2):
+            #         next(file)
 
-                for line in file:
-                    beta = line.split()[0]
-                    energy = line.split()[1]
-                    beta_list.append(beta)
-                    energy_list.append(energy)
+            #     for line in file:
+            #         beta = line.split()[0]
+            #         energy = line.split()[1]
+            #         beta_list.append(beta)
+            #         energy_list.append(energy)
 
-            return beta_list, energy_list
+            # return beta_list, energy_list
+            return path
 
         else:
-            with open(f'{output_path}qite_beta_{beta}_db_{db}_{computer_type}_{expansion_type}_second_order_{second_order}_folded_spectrum_{folded_spectrum}_e_shift_{e_shift}_selected_pool_{selected_pool}_t_{t_thresh}_physical_r_{physical_r}_dfham_{evolve_dfham}_summary.dat', 'r') as file:
-                for _ in range(2):
-                    next(file)
+            path = f'{output_path}qite_beta_{beta}_db_{db}_{computer_type}_{expansion_type}_second_order_{second_order}_folded_spectrum_{folded_spectrum}_e_shift_{e_shift}_selected_pool_{selected_pool}_t_{t_thresh}_physical_r_{physical_r}_dfham_{evolve_dfham}_summary.dat'
+            # with open(f'{output_path}qite_beta_{beta}_db_{db}_{computer_type}_{expansion_type}_second_order_{second_order}_folded_spectrum_{folded_spectrum}_e_shift_{e_shift}_selected_pool_{selected_pool}_t_{t_thresh}_physical_r_{physical_r}_dfham_{evolve_dfham}_summary.dat', 'r') as file:
+            #     for _ in range(2):
+            #         next(file)
 
-                for line in file:
-                    beta = line.split()[0]
-                    energy = line.split()[1]
-                    param = line.split()[2]
-                    cnot = line.split()[3]
-                    pauli = line.split()[4]
-                    beta_list.append(beta)
-                    energy_list.append(energy)
-                    param_list.append(param)
-                    cnot_list.append(cnot)
-                    measure_list.append(pauli)
+            #     for line in file:
+            #         beta = line.split()[0]
+            #         energy = line.split()[1]
+            #         param = line.split()[2]
+            #         cnot = line.split()[3]
+            #         pauli = line.split()[4]
+            #         beta_list.append(beta)
+            #         energy_list.append(energy)
+            #         param_list.append(param)
+            #         cnot_list.append(cnot)
+            #         measure_list.append(pauli)
 
-            return beta_list, energy_list, param_list, cnot_list, measure_list
+            # return beta_list, energy_list, param_list, cnot_list, measure_list
+            return path
 
     else:
         alg = QITE_OLD(system=sys,
@@ -149,23 +155,25 @@ def run_qite(
             lanczos_gap=lanczos_gap,
             output_path=output_path)
 
-        with open(f'{output_path}qite_beta_{beta}_db_{db}_{computer_type}_{expansion_type}_summary.dat', 'r') as file:
-                for _ in range(2):
-                    next(file)
+        path = f'{output_path}qite_beta_{beta}_db_{db}_{computer_type}_{expansion_type}_summary.dat'
+        # with open(f'{output_path}qite_beta_{beta}_db_{db}_{computer_type}_{expansion_type}_summary.dat', 'r') as file:
+        #         for _ in range(2):
+        #             next(file)
 
-                for line in file:
-                    beta = line.split()[0]
-                    energy = line.split()[1]
-                    param = line.split()[2]
-                    cnot = line.split()[3]
-                    pauli = line.split()[4]
-                    beta_list.append(beta)
-                    energy_list.append(energy)
-                    param_list.append(param)
-                    cnot_list.append(cnot)
-                    measure_list.append(pauli)
+        #         for line in file:
+        #             beta = line.split()[0]
+        #             energy = line.split()[1]
+        #             param = line.split()[2]
+        #             cnot = line.split()[3]
+        #             pauli = line.split()[4]
+        #             beta_list.append(beta)
+        #             energy_list.append(energy)
+        #             param_list.append(param)
+        #             cnot_list.append(cnot)
+        #             measure_list.append(pauli)
 
-        return beta_list, energy_list, param_list, cnot_list, measure_list
+        # return beta_list, energy_list, param_list, cnot_list, measure_list
+        return path
 
 def run_qlanczos(sys, 
                  computer_type='fci', 
@@ -224,14 +232,16 @@ def run_qlanczos(sys,
             realistic_lanczos=realistic_lanczos,
             fname=fname)
 
-    with open(f'beta_{beta}_db_{db}_{computer_type}_{expansion_type}_second_order_{second_order}_realistic_{realistic_lanczos}_lanczos_summary.dat', 'r') as file:
-        for _ in range(2):
-            next(file)
+    path = f'beta_{beta}_db_{db}_{computer_type}_{expansion_type}_second_order_{second_order}_realistic_{realistic_lanczos}_lanczos_summary.dat'
+    # with open(f'beta_{beta}_db_{db}_{computer_type}_{expansion_type}_second_order_{second_order}_realistic_{realistic_lanczos}_lanczos_summary.dat', 'r') as file:
+    #     for _ in range(2):
+    #         next(file)
 
-        for line in file:
-            beta = line.split()[0]
-            energy = line.split()[2]
-            beta_list.append(beta)
-            energy_list.append(energy)
+    #     for line in file:
+    #         beta = line.split()[0]
+    #         energy = line.split()[2]
+    #         beta_list.append(beta)
+    #         energy_list.append(energy)
 
-    return beta_list, energy_list
+    # return beta_list, energy_list
+    return path
