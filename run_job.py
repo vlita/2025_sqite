@@ -1,9 +1,9 @@
-from qforte import QITE, QITE_OLD, QLANCZOS
+from qforte import QITE, QITE_OLD, QLANCZOS, UCCNVQE
 
 def run_qite(
     sys, 
     computer_type='fci', 
-    apply_ham_as_tensor=False, 
+    apply_ham_as_tensor=True, 
     ref=None, 
     state_prep_type='occupation_list', 
     trotter_order=1, 
@@ -23,14 +23,15 @@ def run_qite(
     random_state=False,
     sparseSb=False,
     low_memorySb=False,
-    second_order=False,
+    second_order=True,
     selected_pool=False,
     t_thresh=1.0e-6,
     cumulative_t=True,
     b_thresh=1.0e-6,
     x_thresh=1.0e-10,
     conv_thresh=1.0e-3,
-    physical_r = False,
+    physical_r = True,
+    use_df_ham_selection = False,
     folded_spectrum = False,
     BeH2_guess = False,
     e_shift = None,
@@ -83,6 +84,7 @@ def run_qite(
                 x_thresh=x_thresh,
                 conv_thresh=conv_thresh,
                 physical_r=physical_r,
+                use_df_ham_selection = use_df_ham_selection,
                 folded_spectrum=folded_spectrum,
                 BeH2_guess=BeH2_guess,
                 e_shift=e_shift,
@@ -113,7 +115,7 @@ def run_qite(
             return path
 
         else:
-            path = f'{output_path}qite_beta_{beta}_db_{db}_{computer_type}_{expansion_type}_second_order_{second_order}_folded_spectrum_{folded_spectrum}_e_shift_{e_shift}_selected_pool_{selected_pool}_t_{t_thresh}_physical_r_{physical_r}_dfham_{evolve_dfham}_summary.dat'
+            path = f'{output_path}qite_{expansion_type}_selected_pool_{selected_pool}_t_{t_thresh}_dfham_{evolve_dfham}_summary.dat'
             # with open(f'{output_path}qite_beta_{beta}_db_{db}_{computer_type}_{expansion_type}_second_order_{second_order}_folded_spectrum_{folded_spectrum}_e_shift_{e_shift}_selected_pool_{selected_pool}_t_{t_thresh}_physical_r_{physical_r}_dfham_{evolve_dfham}_summary.dat', 'r') as file:
             #     for _ in range(2):
             #         next(file)
@@ -244,4 +246,40 @@ def run_qlanczos(sys,
     #         energy_list.append(energy)
 
     # return beta_list, energy_list
+    return path
+
+def run_vqe(sys, 
+            computer_type = 'fci',
+            opt_thresh=1.0e-3, 
+            pool_type='SD',
+            optimizer='BFGS',
+            output_path=None):
+
+    alg = UCCNVQE(system=sys,
+                  computer_type=computer_type)
+
+    alg.run(opt_thresh=opt_thresh, 
+            pool_type=pool_type,
+            optimizer=optimizer,
+            output_path=output_path)
+
+    path = f'{output_path}vqe_summary.dat'
+   
+    return path
+
+def run_spqe(sys, 
+             computer_type = 'fci',
+             opt_thresh=1.0e-3,
+             spqe_maxiter=1,
+             output_path=None):
+
+    alg = UCCNVQE(system=sys,
+                  computer_type=computer_type)
+
+    alg.run(opt_thresh=opt_thresh, 
+            spqe_maxiter=spqe_maxiter,
+            output_path=output_path)
+
+    path = f'{output_path}spqe_summary.dat'
+   
     return path

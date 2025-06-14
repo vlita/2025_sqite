@@ -1,0 +1,1 @@
+path = '/home/vlita/2025_sqite'
